@@ -1,6 +1,12 @@
 from flask import Flask
+from flask_restful import Api
+
+from resources.entry import EntryResource
 
 app = Flask(__name__)
+
+#link flask-restful api
+api= Api(app)
 
 
 @app.route("/",methods=["POST"])
@@ -37,3 +43,6 @@ def update_category(id):
 @app.delete("/categories/<int:id>")
 def delete_category(id):
     return {"message": "Category deleted"}
+
+
+api.add_resource(EntryResource, "/entries", "/entries/<entry_id>")
