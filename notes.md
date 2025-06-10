@@ -1,6 +1,6 @@
-#Notebook App
+# Notebook App
 
-##Models
+## Models
 
 - Category (id, name, created_at)
 - Entry (id, note, user_id, category_id, created_at, updated_at, deleted_at)
