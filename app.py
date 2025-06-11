@@ -1,13 +1,23 @@
 from flask import Flask
 from flask_restful import Api
+from flask_migrate import Migrate
 
+from models import db
 from resources.entry import EntryResource
 
 app = Flask(__name__)
 
+#configure our flask app through the config object
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///notebook.db"
+
 #link flask-restful api
 api= Api(app)
 
+#create a migrate object to manage migrations
+migrate = Migrate(app, db)
+
+#link our db to the flask app
+db.init_app(app)
 
 @app.route("/",methods=["POST"])
 def index():
