@@ -1,6 +1,8 @@
+from flask import request, jsonify
 from flask_restful import Resource
 
-from models import Category
+
+from models import Category, db
 
 """
 -> We define our methods using http verbs
@@ -11,12 +13,18 @@ class CategoryResource(Resource):
     def get(self, id = None):
         if id == None:
             categories = Category.query.all()
-            print(categories)
-            return categories
+           
+            return jsonify([categories.to_dict() for category in categories])
         else:
             category = Category.query.filter_by(id = id).first()
-            print(category)
-            return category
+           
+            return jsonify(category.to_dict())
         
     def post (self):
-        pass
+        data = request.get_json()
+        category = Category (name = data["name"])
+
+        db.session.add(category)
+        db.session.commit()
+
+        return {"message":"Category added successfully"}, 201

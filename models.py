@@ -1,5 +1,7 @@
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
 
 #initialize meta data -> ALLOWS US TO DEFINE TABLES AND COLUMNS
 metadata = MetaData()
@@ -19,9 +21,12 @@ db = SQLAlchemy(metadata = metadata)
 -> Attributes are columns
 """
 
-class Category(db.Model):
+class Category(db.Model, SerializerMixin):
     __tablename__ = "categories"
 
     id = db.Column (db.Integer, primary_key =True)
     name = db.Column (db.Text, nullable = False)
-    created_at = db.Column(db.TIMESTAMP)
+    created_at = db.Column(db.TIMESTAMP, default=datetime.now())
+
+    def to_dict(self):
+        return {"id":self.id, "name":self.name}
